@@ -1,0 +1,31 @@
+{
+  "name": "equript-lang",
+  "version": "0.0.1",
+  "description": "JavaScript + Equation = ?",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GenbuHase/Equript.git"
+  },
+  "keywords": [
+    "Equript",
+    "JavaScript",
+    "Equation",
+    "Formula",
+    "Library"
+  ],
+  "author": "Genbu Hase",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GenbuHase/Equript/issues"
+  },
+  "homepage": "https://github.com/GenbuHase/Equript#readme",
+  "devDependencies": {
+    "gulp": "^4.0.1",
+    "gulp-typescript": "^5.0.1",
+    "typescript": "^3.4.5"
+  }
+}
