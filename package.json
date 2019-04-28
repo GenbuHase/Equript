@@ -2,7 +2,7 @@
   "name": "equript-lang",
   "version": "0.0.1",
   "description": "JavaScript + Equation = ?",
-  "main": "dist/index.js",
+  "main": "dist/Equript.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/GenbuHase/Equript#readme",
   "devDependencies": {
+    "del": "^4.1.0",
     "gulp": "^4.0.1",
     "gulp-typescript": "^5.0.1",
     "typescript": "^3.4.5"
