@@ -7,7 +7,7 @@ export namespace Equript {
 
 
 
-		static divideTerms (terms: string) {
+		static divideTerms (terms: string): string {
 			return terms
 				.replace(new RegExp(`(?<=${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])(${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}|\\w+)(?=${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])`, "g"), `*$1*`)
 				.replace(new RegExp(`(?<=${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])(${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}|\\w+)`, "g"), `*$1`)
@@ -22,7 +22,7 @@ export namespace Equript {
 		}
 
 		/** 指定された値を代入した方程式を返します */
-		public substitute (args: Equation.EquationArguments = {}) {
+		public substitute (args: Equation.EquationArguments = {}): string {
 			for (const arg of this.args) args[arg] = (args[arg] != null ? args[arg] : arg);
 	
 			let result = this.formula
@@ -39,7 +39,7 @@ export namespace Equript {
 		}
 
 		/** 方程式に指定された値を代入して得られた値を返します */
-		public get (args: Equation.EquationArguments = {}) {
+		public get (args: Equation.EquationArguments = {}): number {
 			return new Function(...["imports"],
 				[
 					'"use strict";',
@@ -53,10 +53,10 @@ export namespace Equript {
 
 
 		/** 方程式をJavaScriptコードに変換したものを返します */
-		private toSource (args: Equation.EquationArguments = {}) {
+		private toSource (args: Equation.EquationArguments = {}): string {
 			let formatted = this.substitute(args);
 			for (const symbol in Equation.Symbols) formatted = formatted.replace(new RegExp(symbol, "g"), Equation.Symbols[symbol]);
-			
+
 			return formatted;
 		}
 	}
@@ -89,7 +89,16 @@ export namespace Equript {
 
 	export class Interrupter {
 		constructor (public code: string) {
-			
+
+		}
+
+		public compile (copyTo: any) {
+			new Function(
+				this.code.replace(
+					/(?<=[^"']\s*)\$([^\$]+)\$/g,
+					'new Equript.Equation("$1").get(args)'
+				)
+			).call(copyTo);
 		}
 	}
 }
