@@ -9,9 +9,9 @@ export namespace Equript {
 
 		static divideTerms (terms: string) {
 			return terms
-				.replace(new RegExp(`(?<=[a-zA-Z]|${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)(?=[a-zA-Z]|${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})`, "g"), `*$1*`)
-				.replace(new RegExp(`(?<=[a-zA-Z]|${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)`, "g"), `*$1`)
-				.replace(new RegExp(`(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)(?=[a-zA-Z]|${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})`, "g"), `$1*`);
+				.replace(new RegExp(`(?<=${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])(${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}|\\w+)(?=${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])`, "g"), `*$1*`)
+				.replace(new RegExp(`(?<=${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])(${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}|\\w+)`, "g"), `*$1`)
+				.replace(new RegExp(`(${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}|\\w+)(?=${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])`, "g"), `$1*`);
 		}
 
 
@@ -26,9 +26,9 @@ export namespace Equript {
 			for (const arg of this.args) args[arg] = (args[arg] != null ? args[arg] : arg);
 	
 			let result = this.formula
-				.replace(new RegExp(`(?<=[a-zA-Z]|${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)(?=[a-zA-Z]|${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})`, "g"), `*$1*`)
-				.replace(new RegExp(`(?<=[a-zA-Z]|${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)`, "g"), `*$1`)
-				.replace(new RegExp(`(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)(?=[a-zA-Z]|${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})`, "g"), `$1*`);
+				.replace(new RegExp(`(?<=${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])(${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}|\\w+)(?=${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])`, "g"), `*$1*`)
+				.replace(new RegExp(`(?<=${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])(${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}|\\w+)`, "g"), `*$1`)
+				.replace(new RegExp(`(${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}|\\w+)(?=${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])`, "g"), `$1*`);
 	
 			for (const arg in args) result = result.replace(new RegExp(arg, "g"), args[arg] + "");
 	
@@ -75,7 +75,7 @@ export namespace Equript {
 		}
 
 		/** 単一文字で記される特殊記号一覧 */
-		export const SymbolChars: Array<string> = ["√", "π", "Π"];
+		export const SymbolChars: Array<string> = ["√", "π", "Π", "sin", "cos"];
 		/** 後方の乗算記号を省略できる特殊記号一覧 */
 		export const Prefix_Symbols: Array<string> = ["π", "Π"];
 		/** 前方の乗算記号を省略できる特殊記号一覧 */
