@@ -9,9 +9,9 @@ export namespace Equript {
 
 		static divideTerms (terms: string) {
 			return terms
-				.replace(new RegExp(`(?<=\\w)(\\d)+(?=[\\w√])`, "g"), `*$1*`)
-				.replace(new RegExp(`(?<=[\\w√])(\\d)+`, "g"), `*$1`)
-				.replace(new RegExp(`(\\d)+(?=[\\w√])`, "g"), `$1*`);
+				.replace(new RegExp(`(?<=\\w|${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)(?=\\w|${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})`, "g"), `*$1*`)
+				.replace(new RegExp(`(?<=\\w|${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)`, "g"), `*$1`)
+				.replace(new RegExp(`(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)(?=\\w|${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})`, "g"), `$1*`);
 		}
 
 
@@ -23,12 +23,13 @@ export namespace Equript {
 
 		/** 指定された値を代入した方程式を返します */
 		public substitute (args: Equation.EquationArguments = {}) {
-			for (const arg of this.args) args[arg] = args[arg] || 0;
+			for (const arg of this.args) args[arg] = args[arg] || arg;
 	
 			let result = this.formula;
 	
 			for (const arg in args) {
-				const value = Equation.divideTerms(args[arg] as string);
+				if (typeof args[arg] === "string") args[arg] = Equation.divideTerms(args[arg] as string);
+				const value = args[arg];
 	
 				result = result
 					.replace(new RegExp(`(?<=\\w)${arg}(?=\\w)`, "g"), `*${value}*`)
@@ -45,13 +46,20 @@ export namespace Equript {
 
 		/** 方程式に指定された値を代入して得られた値を返します */
 		public get (args: Equation.EquationArguments = {}) {
-			return new Function(`"use strict"; return ${this.toSource(args)}`)();
+			return new Function(...["imports"],
+				[
+					'"use strict";',
+					'const { Math_Plus } = imports;',
+					'',
+					`return ${this.toSource(args)};`
+				].join("\n")
+			)({ Math_Plus });
 		}
 
 
 
 		/** 方程式をJavaScriptコードに変換したものを返します */
-		private toSource (args: Equation.EquationArguments = {}) {
+		public toSource (args: Equation.EquationArguments = {}) {
 			let formatted = this.substitute(args);
 			for (const symbol in Equation.Symbols) formatted = formatted.replace(new RegExp(symbol, "g"), Equation.Symbols[symbol]);
 			
@@ -63,9 +71,21 @@ export namespace Equript {
 		/** 数式内で利用できる特殊記号一覧 */
 		export enum Symbols {
 			"√" = "Math.sqrt",
+			"π|Π" = "Math.PI",
+			"sin" = "Math.sin",
+			"cos" = "Math.cos",
+			"tan" = "Math.tan",
+			"log" = "Math.log",
 			"\\|([^|]+)\\|" = "Math.abs($1)",
-			"Σ\\(\\s*([])\\)\\(\\)" = ""
+			"Σ\\(\\s*(?:([\\w]+)\\s*=\\s*(\\d+)),\\s*(\\d+)\\)\\(\\s+(.+)\\s+\\)" = "Math_Plus.sigma($2, $3, $1 => ($4))"
 		}
+
+		/** 単一文字で記される特殊記号一覧 */
+		export const SymbolChars: Array<string> = ["√", "π", "Π"];
+		/** 後方の乗算記号を省略できる特殊記号一覧 */
+		export const Prefix_Symbols: Array<string> = ["π", "Π"];
+		/** 前方の乗算記号を省略できる特殊記号一覧 */
+		export const Suffix_Symbols: Array<string> = ["π", "Π", "√"];
 
 		/** 数式内変数の型 */
 		export type EquationArguments = {
