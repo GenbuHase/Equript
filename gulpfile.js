@@ -28,6 +28,6 @@ gulp.task("compile", gulp.series("compile:core", "compile:test"));
 gulp.task("clean", Tasks["clean"]);
 
 gulp.task("default", () => {
-	gulp.watch(["./src/**/*.ts", "!./src/tests/**/*.ts"], gulp.parallel("compile:core"));
-	gulp.watch("./src/tests/**/*.ts", gulp.parallel("compile:test"));
+	gulp.watch(["./src/**/*.ts", "!./src/tests/**/*.ts"], gulp.series("compile:core"));
+	gulp.watch("./src/tests/**/*.ts", gulp.series("compile:test"));
 });

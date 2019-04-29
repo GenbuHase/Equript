@@ -1,7 +1,11 @@
+import { Math_Plus } from "./libs/Util";
+
 export namespace Equript {
 	export class Equation {
 		/** 数式内で使用される変数配列 */
 		public args: string[];
+
+
 
 		static divideTerms (terms: string) {
 			return terms
@@ -9,6 +13,8 @@ export namespace Equript {
 				.replace(new RegExp(`(?<=[\\w√])(\\d)+`, "g"), `*$1`)
 				.replace(new RegExp(`(\\d)+(?=[\\w√])`, "g"), `$1*`);
 		}
+
+
 
 		/** 方程式を生成します */
 		constructor (public formula: string) {
@@ -22,7 +28,7 @@ export namespace Equript {
 			let result = this.formula;
 	
 			for (const arg in args) {
-				const value = args[arg];
+				const value = Equation.divideTerms(args[arg] as string);
 	
 				result = result
 					.replace(new RegExp(`(?<=\\w)${arg}(?=\\w)`, "g"), `*${value}*`)
@@ -38,9 +44,11 @@ export namespace Equript {
 		}
 
 		/** 方程式に指定された値を代入して得られた値を返します */
-		public getValue (args: Equation.EquationArguments = {}) {
+		public get (args: Equation.EquationArguments = {}) {
 			return new Function(`"use strict"; return ${this.toSource(args)}`)();
 		}
+
+
 
 		/** 方程式をJavaScriptコードに変換したものを返します */
 		private toSource (args: Equation.EquationArguments = {}) {
@@ -53,9 +61,10 @@ export namespace Equript {
 
 	export namespace Equation {
 		/** 数式内で利用できる特殊記号一覧 */
-		export const Symbols: { [symbol: string]: string } = {
-			"√": "Math.sqrt",
-			"\\|([^|]+)\\|": "Math.abs($1)"
+		export enum Symbols {
+			"√" = "Math.sqrt",
+			"\\|([^|]+)\\|" = "Math.abs($1)",
+			"Σ\\(\\s*([])\\)\\(\\)" = ""
 		}
 
 		/** 数式内変数の型 */
