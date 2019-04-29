@@ -9,9 +9,9 @@ export namespace Equript {
 
 		static divideTerms (terms: string) {
 			return terms
-				.replace(new RegExp(`(?<=\\w|${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)(?=\\w|${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})`, "g"), `*$1*`)
-				.replace(new RegExp(`(?<=\\w|${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)`, "g"), `*$1`)
-				.replace(new RegExp(`(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)(?=\\w|${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})`, "g"), `$1*`);
+				.replace(new RegExp(`(?<=[a-zA-Z]|${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)(?=[a-zA-Z]|${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})`, "g"), `*$1*`)
+				.replace(new RegExp(`(?<=[a-zA-Z]|${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)`, "g"), `*$1`)
+				.replace(new RegExp(`(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)(?=[a-zA-Z]|${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})`, "g"), `$1*`);
 		}
 
 
@@ -23,20 +23,14 @@ export namespace Equript {
 
 		/** 指定された値を代入した方程式を返します */
 		public substitute (args: Equation.EquationArguments = {}) {
-			for (const arg of this.args) args[arg] = args[arg] || arg;
+			for (const arg of this.args) args[arg] = (args[arg] != null ? args[arg] : arg);
 	
-			let result = this.formula;
+			let result = this.formula
+				.replace(new RegExp(`(?<=[a-zA-Z]|${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)(?=[a-zA-Z]|${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})`, "g"), `*$1*`)
+				.replace(new RegExp(`(?<=[a-zA-Z]|${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)`, "g"), `*$1`)
+				.replace(new RegExp(`(\\d|${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}+)(?=[a-zA-Z]|${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)})`, "g"), `$1*`);
 	
-			for (const arg in args) {
-				if (typeof args[arg] === "string") args[arg] = Equation.divideTerms(args[arg] as string);
-				const value = args[arg];
-	
-				result = result
-					.replace(new RegExp(`(?<=\\w)${arg}(?=\\w)`, "g"), `*${value}*`)
-					.replace(new RegExp(`(?<=\\w)${arg}`, "g"), `*${value}`)
-					.replace(new RegExp(`${arg}(?=\\w)`, "g"), `${value}*`)
-					.replace(new RegExp(arg, "g"), value + "");
-			}
+			for (const arg in args) result = result.replace(new RegExp(arg, "g"), args[arg] + "");
 	
 			const reversePrefixes = (result.match(/(\+ ?\-|\- ?\-)/g) || []);
 			for (const prefix of reversePrefixes) result = result.replace(prefix, prefix.replace(/\s/g, "") == "+-" ? "- " : "+ ");
