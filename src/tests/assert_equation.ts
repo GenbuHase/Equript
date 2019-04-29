@@ -10,7 +10,6 @@ console.log({
 	equation: equation1,
 	substituted: equation1.substitute(equation1_values),
 	value: equation1.get(equation1_values),
-	source: equation1.toSource(equation1_values)
 });
 
 
@@ -26,7 +25,6 @@ console.log({
 	equation: equation2,
 	substituted: equation2.substitute({  }),
 	value: equation2.get({  }),
-	source: equation2.toSource({  })
 });
 
 
@@ -43,13 +41,12 @@ console.log({
 	equation: equation3,
 	substituted: equation3.substitute(equation3_values),
 	value: equation3.get(equation3_values),
-	source: equation3.toSource(equation3_values)
 });
 
 
 
-console.log(Equript.Equation.divideTerms("(x - a)**2 + (y - b)**2 - |r|**2"));
+/*console.log(Equript.Equation.divideTerms("(x - a)**2 + (y - b)**2 - |r|**2"));
 console.log(Equript.Equation.divideTerms("(a + b) - 2√(ab)"));
 console.log(Equript.Equation.divideTerms("(40πr**3) / 3"));
 console.log(Equript.Equation.divideTerms("sinAcosB + cosAsinB"));
-console.log(Equript.Equation.divideTerms("|ax + by + c| / √((a)**2 + (b)**2)"));
+console.log(Equript.Equation.divideTerms("|ax + by + c| / √((a)**2 + (b)**2)"));*/

@@ -53,7 +53,7 @@ export namespace Equript {
 
 
 		/** 方程式をJavaScriptコードに変換したものを返します */
-		public toSource (args: Equation.EquationArguments = {}) {
+		private toSource (args: Equation.EquationArguments = {}) {
 			let formatted = this.substitute(args);
 			for (const symbol in Equation.Symbols) formatted = formatted.replace(new RegExp(symbol, "g"), Equation.Symbols[symbol]);
 			
