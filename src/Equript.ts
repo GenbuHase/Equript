@@ -85,6 +85,8 @@ export namespace Equript {
 		}
 	}
 
+
+
 	export class Interpreter {
 		public constructor (public code: string) {}
 
