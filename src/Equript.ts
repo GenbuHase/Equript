@@ -40,14 +40,12 @@ export namespace Equript {
 
 		/** 方程式に指定された値を代入して得られた値を返します */
 		public get (args: Equation.EquationArguments = {}): number {
-			return new Function(...["imports"],
+			return new Function(...["Math_Plus"],
 				[
 					'"use strict";',
-					'const { Math_Plus } = imports;',
-					'',
 					`return ${this.toSource(args)};`
 				].join("\n")
-			)({ Math_Plus });
+			)(...[Math_Plus]);
 		}
 
 
@@ -71,7 +69,7 @@ export namespace Equript {
 			"tan" = "Math.tan",
 			"log" = "Math.log",
 			"\\|([^|]+)\\|" = "Math.abs($1)",
-			"Σ\\(\\s*(?:([\\w]+)\\s*=\\s*(\\d+)),\\s*(\\d+)\\)\\(\\s+(.+)\\s+\\)" = "Math_Plus.sigma($2, $3, $1 => ($4))"
+			"Σ\\(\\s*(?:(\\w+)\\s*=\\s*(\\d+)),\\s*(\\w+)\\)\\(\\s+(.+)\\s+\\)" = "Math_Plus.sigma($2, $3, $1 => ($4))"
 		}
 
 		/** 単一文字で記される特殊記号一覧 */
@@ -87,18 +85,17 @@ export namespace Equript {
 		}
 	}
 
-	export class Interrupter {
-		constructor (public code: string) {
+	export class Interpreter {
+		constructor (public code: string) {}
 
-		}
-
-		public compile (copyTo: any) {
-			new Function(
+		/** 数式記述をJavaScriptコードに変換します */
+		public compile () {
+			new Function(...["Equript"], 
 				this.code.replace(
 					/(?<=[^"']\s*)\$([^\$]+)\$/g,
-					'new Equript.Equation("$1").get(args)'
+					'new Equript.Equation("$1")'
 				)
-			).call(copyTo);
+			)(...[Equript]);
 		}
 	}
 }

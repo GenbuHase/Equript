@@ -19,12 +19,12 @@ console.log({
  *  Σ (k) = 55
  * k=1
  */
-const equation2: Equript.Equation = new Equript.Equation("Σ(k = 1, 10)( k )");
+const equation2: Equript.Equation = new Equript.Equation("Σ(k = 1, n)( k )");
 
 console.log({
 	equation: equation2,
-	substituted: equation2.substitute({  }),
-	value: equation2.get({  }),
+	substituted: equation2.substitute({ n: 10 }),
+	value: equation2.get({ n: 10 }),
 });
 
 
