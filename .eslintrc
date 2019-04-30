@@ -1,5 +1,4 @@
 {
-	"extends": "eslint:recommended",
 	"plugins": ["@typescript-eslint"],
 
 	"env": {
@@ -18,8 +17,8 @@
 	"rules": {
 		"semi": ["error", "always", { "omitLastInOneLineBlock": true }],
 		"semi-style": ["error", "last"],
-		"no-unused-vars": "warn",
 		"no-duplicate-imports": "error",
+		"no-console": "warn",
 		"object-shorthand": ["error", "always", { "avoidExplicitReturnArrows": true }],
 		"prefer-rest-params": "warn",
 		"prefer-spread": "warn",

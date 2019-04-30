@@ -90,7 +90,7 @@ export namespace Equript {
 
 		/** 数式記述をJavaScriptコードに変換します */
 		public compile (): void {
-			new Function(...["Equript"], 
+			new Function(...["Equript"],
 				this.code.replace(
 					/(?<=[^"']\s*)\$([^\$]+)\$/g,
 					'new Equript.Equation("$1")'
