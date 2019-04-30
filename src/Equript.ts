@@ -1,4 +1,4 @@
-import { Math_Plus } from "./libs/Util";
+import { MathPlus } from "./libs/Util";
 
 export namespace Equript {
 	export class Equation {
@@ -7,18 +7,18 @@ export namespace Equript {
 
 
 
-		static divideTerms (terms: string): string {
+		public static divideTerms (terms: string): string {
 			return terms
-				.replace(new RegExp(`(?<=${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])(${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}|\\w+)(?=${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])`, "g"), `*$1*`)
-				.replace(new RegExp(`(?<=${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])(${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}|\\w+)`, "g"), `*$1`)
-				.replace(new RegExp(`(${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}|\\w+)(?=${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])`, "g"), `$1*`);
+				.replace(new RegExp(`(?<=${Equation.Prefix_Symbols.reduce((mem, symbol): string => mem += `|${symbol}`)}|[a-zA-Z])(${Equation.SymbolChars.reduce((mem, symbol): string => mem += `|${symbol}`)}|\\w+)(?=${Equation.Suffix_Symbols.reduce((mem, symbol): string => mem += `|${symbol}`)}|[a-zA-Z])`, "g"), `*$1*`)
+				.replace(new RegExp(`(?<=${Equation.Prefix_Symbols.reduce((mem, symbol): string => mem += `|${symbol}`)}|[a-zA-Z])(${Equation.SymbolChars.reduce((mem, symbol): string => mem += `|${symbol}`)}|\\w+)`, "g"), `*$1`)
+				.replace(new RegExp(`(${Equation.SymbolChars.reduce((mem, symbol): string => mem += `|${symbol}`)}|\\w+)(?=${Equation.Suffix_Symbols.reduce((mem, symbol): string => mem += `|${symbol}`)}|[a-zA-Z])`, "g"), `$1*`);
 		}
 
 
 
 		/** 方程式を生成します */
-		constructor (public formula: string) {
-			this.args = formula.replace(/\s/g, "").match(/[a-zA-Z]/g).filter((arg, index, args) => args.indexOf(arg) === index);
+		public constructor (public formula: string) {
+			this.args = formula.replace(/\s/g, "").match(/[a-zA-Z]/g).filter((arg, index, args): boolean => args.indexOf(arg) === index);
 		}
 
 		/** 指定された値を代入した方程式を返します */
@@ -26,11 +26,11 @@ export namespace Equript {
 			for (const arg of this.args) args[arg] = (args[arg] != null ? args[arg] : arg);
 	
 			let result = this.formula
-				.replace(new RegExp(`(?<=${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])(${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}|\\w+)(?=${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])`, "g"), `*$1*`)
-				.replace(new RegExp(`(?<=${Equation.Prefix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])(${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}|\\w+)`, "g"), `*$1`)
-				.replace(new RegExp(`(${Equation.SymbolChars.reduce((mem, symbol) => mem += `|${symbol}`)}|\\w+)(?=${Equation.Suffix_Symbols.reduce((mem, symbol) => mem += `|${symbol}`)}|[a-zA-Z])`, "g"), `$1*`);
+				.replace(new RegExp(`(?<=${Equation.Prefix_Symbols.reduce((mem, symbol): string => mem += `|${symbol}`)}|[a-zA-Z])(${Equation.SymbolChars.reduce((mem, symbol): string => mem += `|${symbol}`)}|\\w+)(?=${Equation.Suffix_Symbols.reduce((mem, symbol): string => mem += `|${symbol}`)}|[a-zA-Z])`, "g"), `*$1*`)
+				.replace(new RegExp(`(?<=${Equation.Prefix_Symbols.reduce((mem, symbol): string => mem += `|${symbol}`)}|[a-zA-Z])(${Equation.SymbolChars.reduce((mem, symbol): string => mem += `|${symbol}`)}|\\w+)`, "g"), `*$1`)
+				.replace(new RegExp(`(${Equation.SymbolChars.reduce((mem, symbol): string => mem += `|${symbol}`)}|\\w+)(?=${Equation.Suffix_Symbols.reduce((mem, symbol): string => mem += `|${symbol}`)}|[a-zA-Z])`, "g"), `$1*`);
 	
-			for (const arg in args) result = result.replace(new RegExp(arg, "g"), args[arg] + "");
+			for (const arg in args) result = result.replace(new RegExp(arg, "g"), `${args[arg]}`);
 	
 			const reversePrefixes = (result.match(/(\+ ?\-|\- ?\-)/g) || []);
 			for (const prefix of reversePrefixes) result = result.replace(prefix, prefix.replace(/\s/g, "") == "+-" ? "- " : "+ ");
@@ -40,12 +40,12 @@ export namespace Equript {
 
 		/** 方程式に指定された値を代入して得られた値を返します */
 		public get (args: Equation.EquationArguments = {}): number {
-			return new Function(...["Math_Plus"],
+			return new Function(...["MathPlus"],
 				[
 					'"use strict";',
 					`return ${this.toSource(args)};`
 				].join("\n")
-			)(...[Math_Plus]);
+			)(...[MathPlus]);
 		}
 
 
@@ -73,23 +73,23 @@ export namespace Equript {
 		}
 
 		/** 単一文字で記される特殊記号一覧 */
-		export const SymbolChars: Array<string> = ["√", "π", "Π", "sin", "cos"];
+		export const SymbolChars: string[] = ["√", "π", "Π", "sin", "cos"];
 		/** 後方の乗算記号を省略できる特殊記号一覧 */
-		export const Prefix_Symbols: Array<string> = ["π", "Π"];
+		export const Prefix_Symbols: string[] = ["π", "Π"];
 		/** 前方の乗算記号を省略できる特殊記号一覧 */
-		export const Suffix_Symbols: Array<string> = ["π", "Π", "√"];
+		export const Suffix_Symbols: string[] = ["π", "Π", "√"];
 
 		/** 数式内変数の型 */
-		export type EquationArguments = {
+		export interface EquationArguments {
 			[name: string]: number | string;
 		}
 	}
 
 	export class Interpreter {
-		constructor (public code: string) {}
+		public constructor (public code: string) {}
 
 		/** 数式記述をJavaScriptコードに変換します */
-		public compile () {
+		public compile (): void {
 			new Function(...["Equript"], 
 				this.code.replace(
 					/(?<=[^"']\s*)\$([^\$]+)\$/g,
