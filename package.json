@@ -28,5 +28,8 @@
     "gulp": "^4.0.1",
     "gulp-typescript": "^5.0.1",
     "typescript": "^3.4.5"
+  },
+  "dependencies": {
+    "@types/node": "^11.13.8"
   }
 }
