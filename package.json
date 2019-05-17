@@ -1,7 +1,7 @@
 {
   "name": "equript-lang",
   "version": "0.0.1",
-  "description": "JavaScript + Equation = ?",
+  "description": "JavaScript + Equation = ???",
   "main": "dist/Equript.js",
   "scripts": {
     "build": "webpack",

@@ -3,12 +3,51 @@
 <HTML>
 	<Head>
 		<Meta Charset = "UTF-8" />
+		<Meta Http-Equiv = "X-UA-Compatible" Content = "IE=edge" />
+		<Meta Name = "Viewport" Content = "Width=Device-Width, Initial-Scale=1.0, User-Scalable=No" />
 		<Title>Equript | JavaScript + Equation = ?</Title>
 
-		<Script Src = "../dist/Equript.js"></Script>
+		<Link Rel = "StyleSheet" Href = "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+		<Link Rel = "StyleSheet" Href = "https://fonts.googleapis.com/icon?family=Material+Icons" />
+		<Link Rel = "StyleSheet" Href = "./main.css" />
+
+		<Script Src = "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></Script>
+		<Script Src = "./Equript.js"></Script>
+		<Script Src = "./main.js" Defer></Script>
 	</Head>
 
 	<Body>
-		
+		<Header Class = "navbar-fixed">
+			<Nav>
+				<Div Class = "nav-wrapper">
+					<Span Class = "brand-logo center">Equript</Span>
+				</Div>
+			</Nav>
+		</Header>
+
+		<Main Class = "container">
+			<Blockquote Class = "flow-text">JavaScript + Equation = ???</Blockquote>
+
+			<Article ID = "concept">
+				<H4 Class = "article-title">Concept</H4>
+				<P>
+					Equriptは数式記述に特化した、JavaScriptをベースとする新しい言語仕様です。
+				</P>
+			</Article>
+
+			<Article ID = "tester">
+				<Div Class = "input-field">
+					<Input ID = "tester-formula" Type = "Text" />
+					<Label For = "tester-formula">数式</Label>
+				</Div>
+
+				<Div ID = "tester-info" Class = "row">
+					<Code ID = "tester-info-code_preview" Class = "col s12 l5 card-panel"></Code>
+					<Div ID = "tester-info-result" Class = "col s12 l5 offset-l2 card-panel"></Div>
+				</Div>
+
+				<Button ID = "tester-run" Class = "btn waves-effect waves-light">Run!</Button>
+			</Article>
+		</Main>
 	</Body>
 </HTML>

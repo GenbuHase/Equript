@@ -1,0 +1,22 @@
+Main Article {
+	padding: 1em 0;
+}
+
+Main Article .article-title {
+	font-size: 2em;
+	text-decoration: underline;
+}
+
+Main Article .article-title::before {
+	content: "◎";
+}
+
+
+
+#tester #tester-info > div {
+	padding: 1em;
+}
+
+#tester #tester-info #tester-info-code_preview {
+	font-size: small;
+}
