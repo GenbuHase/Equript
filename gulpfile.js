@@ -5,22 +5,22 @@ const del = require("del");
 const tsProject = gulp_ts.createProject("./tsconfig.json");
 
 const Tasks = {
-	"compile:core": () => {
+	"compile:core" () {
 		return gulp.src(["./src/**/*.ts", "!./src/tests/**/*.ts"])
 			.pipe(tsProject())
 			.js.pipe(gulp.dest("./dist"));
 	},
 
-	"compile:test": () => {
+	"compile:test" () {
 		return gulp.src(["./src/tests/**/*.ts"])
 			.pipe(tsProject())
 			.js.pipe(gulp.dest("./dist/tests"));
 	},
 
-	"clean": async () => {
+	async "clean" () {
 		await del(["./dist/**/"]);
 	}
-}
+};
 
 gulp.task("compile:core", Tasks["compile:core"]);
 gulp.task("compile:test", Tasks["compile:test"]);
