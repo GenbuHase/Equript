@@ -1,9 +1,10 @@
-{	
+{
 	"compilerOptions": {
-		"target": "es6",
-		"module": "commonjs",
+		"target": "es5",
+		"module": "es2015",
+		"sourceMap": true,
 
 		"noImplicitAny": true,
-		"noImplicitThis": true
+		"noImplicitThis": true,
 	}
 }

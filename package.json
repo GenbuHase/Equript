@@ -4,6 +4,8 @@
   "description": "JavaScript + Equation = ?",
   "main": "dist/Equript.js",
   "scripts": {
+    "build": "webpack",
+    "watch": "webpack -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -27,7 +29,10 @@
     "del": "^4.1.0",
     "gulp": "^4.0.1",
     "gulp-typescript": "^5.0.1",
-    "typescript": "^3.4.5"
+    "ts-loader": "^6.0.0",
+    "typescript": "^3.4.5",
+    "webpack": "^4.31.0",
+    "webpack-cli": "^3.3.2"
   },
   "dependencies": {
     "@types/node": "^11.13.8"
